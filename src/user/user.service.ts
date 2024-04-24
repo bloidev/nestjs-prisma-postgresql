@@ -7,7 +7,7 @@ const prisma =  new PrismaClient();
 export class UserService {
   constructor() {}
 
-  async createUser(data: User): Promise<User> {
+  async createUser(data: Omit<User, "id">): Promise<User> {
     return prisma.user.create({
       data,
     });
@@ -24,9 +24,11 @@ export class UserService {
   }
 
   async findUserByEmailAndPass(email: string, pass: string): Promise<User> {
-    return prisma.user.findUnique({
+    
+    return await prisma.user.findUnique({
       where: { email: email, pass: pass },
     });
+
   }  
 
   async updateUser(userId: number, data: { name?: string }): Promise<User> {
