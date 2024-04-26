@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'; 
 import { PrismaClient, User } from '@prisma/client'; 
+import { UserCreateDto } from 'src/auth/dto/userCreateDto';
 
 const prisma =  new PrismaClient();
 
@@ -7,10 +8,14 @@ const prisma =  new PrismaClient();
 export class UserService {
   constructor() {}
 
-  async createUser(data: Omit<User, "id">): Promise<User> {
-    return prisma.user.create({
-      data,
-    });
+  async createUser(data: UserCreateDto): Promise<User> {
+    return prisma.user.create({ 
+      data: {
+        email: data.email,
+        name: data.name,
+        pass: data.pass
+      }
+     });
   }
 
   async findAllUsers(): Promise<User[]> {
